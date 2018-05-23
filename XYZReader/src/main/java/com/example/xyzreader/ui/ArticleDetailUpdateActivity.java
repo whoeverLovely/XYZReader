@@ -10,22 +10,24 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.support.v7.widget.Toolbar;
 
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.data.ItemsContract;
 
 public class ArticleDetailUpdateActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<Cursor> {
+        LoaderManager.LoaderCallbacks<Cursor>, FragmentManager.OnBackStackChangedListener {
 
     private static final String TAG = ArticleDetailUpdateActivity.class.getSimpleName();
 
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
-    private int pageCount;
+    private Cursor mCursor;
 
 
     @Override
@@ -36,23 +38,15 @@ public class ArticleDetailUpdateActivity extends AppCompatActivity implements
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = findViewById(R.id.pager);
 
-        // Create a new Fragment to be placed in the activity layout
-        ArticleDetailUpdateFragment detailFragmentUpdate = new ArticleDetailUpdateFragment();
-
-        // In case this activity was started with special instructions from an
-        // Intent, pass the Intent's extras to the fragment as arguments
-        detailFragmentUpdate.setArguments(getIntent().getExtras());
-        long id = ItemsContract.Items.getItemId(getIntent().getData());
-
-        Log.d(TAG, "the itemId received in detail activity: " + String.valueOf(id));
-        detailFragmentUpdate.setId(id);
-
-        // Add the fragment to the 'fragment_container' FrameLayout
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.pager, detailFragmentUpdate).commit();
-
         getSupportLoaderManager().initLoader(0, null, this);
+        //Handle when activity is recreated like on orientation Change
+        shouldDisplayHomeUp();
+    }
 
+    public void shouldDisplayHomeUp(){
+        //Enable Up button only  if there are entries in the back stack
+        boolean canback = getSupportFragmentManager().getBackStackEntryCount()>0;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(canback);
     }
 
     @NonNull
@@ -63,38 +57,59 @@ public class ArticleDetailUpdateActivity extends AppCompatActivity implements
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        pageCount = data.getCount();
+        mCursor = data;
 
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), data);
         mPager.setAdapter(mPagerAdapter);
+
+        mPager.setCurrentItem(getIntent().getIntExtra(ArticleListActivity.EXTRA_POSITION, -1));
     }
 
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        mPager.setAdapter(mPagerAdapter);
+        mCursor = null;
+        mPagerAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onBackStackChanged() {
+        shouldDisplayHomeUp();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        //This method is called when the up button is pressed. Just the pop back stack.
+        getSupportFragmentManager().popBackStack();
+        return true;
+    }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
         Cursor data;
+        ArticleDetailUpdateFragment detailUpdateFragment;
+
         public ScreenSlidePagerAdapter(FragmentManager fm, Cursor data) {
             super(fm);
             this.data = data;
+
+            fm.addOnBackStackChangedListener(ArticleDetailUpdateActivity.this);
+
+            detailUpdateFragment = new ArticleDetailUpdateFragment();
         }
 
         @Override
         public Fragment getItem(int position) {
-            ArticleDetailUpdateFragment detailFragmentUpdate = new ArticleDetailUpdateFragment();
+            detailUpdateFragment = new ArticleDetailUpdateFragment();
             data.moveToPosition(position);
             long id = data.getLong(data.getColumnIndex(ItemsContract.Items._ID));
-            detailFragmentUpdate.setId(id);
+            detailUpdateFragment.setId(id);
 
-            return detailFragmentUpdate;
+            Log.d(TAG, "getItem position: " + position);
+            return detailUpdateFragment;
         }
 
         @Override
         public int getCount() {
-            return pageCount;
+            return mCursor.getCount();
         }
     }
 

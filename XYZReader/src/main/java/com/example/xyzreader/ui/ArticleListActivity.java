@@ -35,7 +35,7 @@ import java.util.GregorianCalendar;
 /**
  * An activity representing a list of Articles. This activity has different presentations for
  * handset and tablet-size devices. On handsets, the activity presents a list of items, which when
- * touched, lead to a {@link ArticleDetailActivity} representing item details. On tablets, the
+ * touched, lead to a {@link } representing item details. On tablets, the
  * activity presents a grid of items as cards.
  */
 public class ArticleListActivity extends AppCompatActivity implements
@@ -51,6 +51,9 @@ public class ArticleListActivity extends AppCompatActivity implements
     private SimpleDateFormat outputFormat = new SimpleDateFormat();
     // Most time functions can only handle 1902 - 2037
     private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2,1,1);
+
+    public final static String EXTRA_ITEM_ID = "itemId";
+    public final static String EXTRA_POSITION = "position";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,8 +162,11 @@ public class ArticleListActivity extends AppCompatActivity implements
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(Intent.ACTION_VIEW,
-                            ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition()))));
+
+                    Intent intent = new Intent(ArticleListActivity.this, ArticleDetailUpdateActivity.class);
+                    intent.putExtra(EXTRA_ITEM_ID, getItemId(vh.getAdapterPosition()));
+                    intent.putExtra(EXTRA_POSITION, vh.getAdapterPosition());
+                    startActivity(intent);
                 }
             });
             return vh;

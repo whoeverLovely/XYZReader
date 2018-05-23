@@ -1,6 +1,7 @@
 package com.example.xyzreader.ui;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -12,6 +13,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -59,16 +62,8 @@ public class ArticleDetailUpdateFragment extends Fragment
      * fragment (e.g. upon screen orientation changes).
      */
     public ArticleDetailUpdateFragment() {
+
     }
-
-    /*@Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            mItemId = getArguments().getLong(ARG_ITEM_ID);
-        }
-    }*/
 
     public void setId(Long id) {
         mItemId = id;
@@ -106,6 +101,7 @@ public class ArticleDetailUpdateFragment extends Fragment
         });
 
         bindViews();
+
         return mRootView;
     }
 

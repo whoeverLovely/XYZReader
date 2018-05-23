@@ -31,10 +31,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public class ArticleDetailFragmentUpdate extends Fragment
+public class ArticleDetailUpdateFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private final static String TAG = ArticleDetailFragmentUpdate.class.getSimpleName();
+    private final static String TAG = ArticleDetailUpdateFragment.class.getSimpleName();
 
     private Cursor mCursor;
     public static final String ARG_ITEM_ID = "item_id";
@@ -58,7 +58,7 @@ public class ArticleDetailFragmentUpdate extends Fragment
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ArticleDetailFragmentUpdate() {
+    public ArticleDetailUpdateFragment() {
     }
 
     /*@Override

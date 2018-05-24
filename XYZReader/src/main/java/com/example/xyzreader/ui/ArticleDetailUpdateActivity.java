@@ -21,7 +21,7 @@ import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.data.ItemsContract;
 
 public class ArticleDetailUpdateActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<Cursor>, FragmentManager.OnBackStackChangedListener {
+        LoaderManager.LoaderCallbacks<Cursor>{
 
     private static final String TAG = ArticleDetailUpdateActivity.class.getSimpleName();
 
@@ -39,14 +39,6 @@ public class ArticleDetailUpdateActivity extends AppCompatActivity implements
         mPager = findViewById(R.id.pager);
 
         getSupportLoaderManager().initLoader(0, null, this);
-        //Handle when activity is recreated like on orientation Change
-        shouldDisplayHomeUp();
-    }
-
-    public void shouldDisplayHomeUp(){
-        //Enable Up button only  if there are entries in the back stack
-        boolean canback = getSupportFragmentManager().getBackStackEntryCount()>0;
-        getSupportActionBar().setDisplayHomeAsUpEnabled(canback);
     }
 
     @NonNull
@@ -72,11 +64,6 @@ public class ArticleDetailUpdateActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onBackStackChanged() {
-        shouldDisplayHomeUp();
-    }
-
-    @Override
     public boolean onSupportNavigateUp() {
         //This method is called when the up button is pressed. Just the pop back stack.
         getSupportFragmentManager().popBackStack();
@@ -90,8 +77,6 @@ public class ArticleDetailUpdateActivity extends AppCompatActivity implements
         public ScreenSlidePagerAdapter(FragmentManager fm, Cursor data) {
             super(fm);
             this.data = data;
-
-            fm.addOnBackStackChangedListener(ArticleDetailUpdateActivity.this);
 
             detailUpdateFragment = new ArticleDetailUpdateFragment();
         }

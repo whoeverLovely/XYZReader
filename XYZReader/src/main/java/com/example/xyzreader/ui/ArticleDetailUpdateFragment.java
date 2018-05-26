@@ -16,6 +16,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -150,7 +151,12 @@ public class ArticleDetailUpdateFragment extends Fragment
 
             // Set author, date and content TextView
             mDetailAuthtv.setText(mCursor.getString(ArticleLoader.Query.AUTHOR));
-            mDetailContent.setText(mCursor.getString(ArticleLoader.Query.BODY));
+            /*String textContent = mCursor.getString(ArticleLoader.Query.BODY);
+            *//*textContent = textContent.replace("\n", "").replace("\r", "");*//*
+            Log.d(TAG, textContent);*/
+            mDetailContent.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY)
+                    .replaceAll("(\r\n\r\n)", "<br/><br/>"))
+                    .toString());
 
             Date publishedDate = parsePublishedDate();
             if (!publishedDate.before(START_OF_EPOCH.getTime())) {

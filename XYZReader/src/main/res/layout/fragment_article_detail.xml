@@ -72,7 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/detail_body_text_size"
-                tools:text="hello world" />
+                tools:text="hello world hello world hello world hello world" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

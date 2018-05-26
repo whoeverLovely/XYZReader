@@ -21,7 +21,8 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@color/photo_placeholder"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:scaleType = "centerCrop"/>
 
         <TextView
             android:id="@+id/article_title"
@@ -32,7 +33,6 @@
             android:paddingTop="16dp"
             android:paddingRight="16dp"
             android:paddingBottom="4dp"
-            android:textColor="@color/ltgray"
             android:ellipsize="end"
             android:maxLines="4" />
 
